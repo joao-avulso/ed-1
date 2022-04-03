@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
+#include <stdlib.h>
 #define tamMax 4
 #define Vermelho "\e[1;31m"
 #define Amarelo "\e[1;33m"
@@ -24,6 +26,41 @@ bool PilhaCheia(Pilha p){
 
 bool PilhaVazia(Pilha p){
     return p.topo == -1;
+}
+
+int Sorteia(int *x, int *y, int *z){
+    int k;
+    k = (rand() % 3) + 1; 
+
+    switch(k){
+        case 1: 
+            if(*x == 4){
+               return Sorteia(x, y, z);
+            }
+            else{
+                *x = *x+1;
+                return k;
+            }
+        break;
+        case 2:
+            if(*y == 4){
+                return Sorteia(x, y, z);
+            }
+            else{
+                *y=*y+1;
+                return k;
+            }
+        break;
+        case 3:
+            if(*z == 4){
+                return Sorteia(x, y, z);
+            }
+            else{
+                *z=*z+1;
+                return k;
+            }
+        break;
+    }
 }
 
 int Desempilha(Pilha *p){
@@ -111,8 +148,10 @@ bool JogoAcabou(Pilha *p, int x){
 }
 
 int main(){
-    int numP = 5;       //Numero de pilhas/frascos
-    Pilha q[numP];      //Declara pilha
+    int numP = 5;                  //Numero de pilhas/frascos
+    Pilha q[numP];                //Declara pilha
+    int a[3] = {0, 0, 0};       //Variáves de auxílio para o sorteio
+    srand(time(NULL));
 
     //Vermelho = 1
     //Amarelo = 2
@@ -120,26 +159,26 @@ int main(){
 
     //Pilha 1
     inicializaPilha(&q[0]);
-    q[0].elem[0] = 2;
-    q[0].elem[1] = 3;
-    q[0].elem[2] = 3;
-    q[0].elem[3] = 1;
+    q[0].elem[0] = Sorteia(&a[0], &a[1], &a[2]);
+    q[0].elem[1] = Sorteia(&a[0], &a[1], &a[2]);
+    q[0].elem[2] = Sorteia(&a[0], &a[1], &a[2]);
+    q[0].elem[3] = Sorteia(&a[0], &a[1], &a[2]);
     q[0].topo = 3;
 
     //Pilha 2
     inicializaPilha(&q[1]);
-    q[1].elem[0] = 2;
-    q[1].elem[1] = 3;
-    q[1].elem[2] = 2;
-    q[1].elem[3] = 2;
+    q[1].elem[0] = Sorteia(&a[0], &a[1], &a[2]);
+    q[1].elem[1] = Sorteia(&a[0], &a[1], &a[2]);
+    q[1].elem[2] = Sorteia(&a[0], &a[1], &a[2]);
+    q[1].elem[3] = Sorteia(&a[0], &a[1], &a[2]);
     q[1].topo = 3;
 
     //Pilha 3
     inicializaPilha(&q[2]);
-    q[2].elem[0] = 3;
-    q[2].elem[1] = 1;
-    q[2].elem[2] = 1;
-    q[2].elem[3] = 1;
+    q[2].elem[0] = Sorteia(&a[0], &a[1], &a[2]);
+    q[2].elem[1] = Sorteia(&a[0], &a[1], &a[2]);
+    q[2].elem[2] = Sorteia(&a[0], &a[1], &a[2]);
+    q[2].elem[3] = Sorteia(&a[0], &a[1], &a[2]);
     q[2].topo = 3;
 
     //Pilha 4
