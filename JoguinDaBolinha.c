@@ -37,7 +37,7 @@ int Desempilha(Pilha *p, int *s, int v){
     p->topo = p->topo - 1;
 
     for(int i = 1; i < v; i++){         //continua desempilhando se o elemento debaixo é igual a p.topo
-        if(p->elem[p->topo] == x){
+        if(p->topo > -1 && p->elem[p->topo] == x){
             p->elem[p->topo] = 0;
             p->topo = p->topo - 1;
             *s = *s + 1;
