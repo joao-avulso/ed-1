@@ -244,7 +244,7 @@ int main(){
     {
         int numC;                           //Numero de cores. Deve ser entre 2 e 7
 
-        printf("Escolha a quantidade de cores para jogar (2 a 7): ");
+        printf("\nEscolha a quantidade de cores para jogar (2 a 7): ");
         scanf("%d", &numC);
         while((numC<2) || (numC>7)){
             printf("\nNumero de cores invalido! Escolha um valor de 2 a 7: ");
@@ -266,7 +266,7 @@ int main(){
         }
 
         fflush(stdin);
-        printf("Deseja jogar novamente? (s/n)");
+        printf("\nDeseja jogar novamente? (s/n)");
         scanf("%c", &aux);
 
     } while (aux == 's');
