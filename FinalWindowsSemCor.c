@@ -1,3 +1,8 @@
+////////TRABALHO JOGO DE GERENCIAMENTO DE PILHAS
+////////João Augusto da Silva Gomes RA:120114
+////////Caio Vieira Arasaki RA:127513
+
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <time.h>
@@ -41,41 +46,6 @@ void Empilha(Pilha *p, int x){
 
 //////////////////////////////////////////////////////////////////////Funções do jogo///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-void inicializaZero(Pilha *p){      //Inicializa a pilha com todos os elementos iguais a zero
-    p->topo = -1;
-    for(int i = 0; i < tamMax; i++)
-        p->elem[i] = 0;
-}
-
-void DesempilhaEmpilha(Pilha *p, int numP){     //Seleciona os frascos a serem desempilhados e empilhados
-    int a, b, x;
-    
-    do{
-    printf("\n  Escolha o frasco de onde deseja remover: ");
-    scanf("%d", &a);
-    printf("  Escolha o frasco onde deseja colocar: ");
-    scanf("%d", &b);
-    
-    a--;b--;    //Pilha 1 = p[0]
-    
-    if ((a<0) || (a>=numP) || (b<0) || (b>=numP)) 
-        printf("\n**TENTE NOVAMENTE**\n");
-    
-    } while ((a<0) || (a>=numP) || (b<0) || (b>=numP));     //Repete a pergunta se os frascos escolhidos não existem
-
-
-    if(!PilhaVazia(p[a]) && !PilhaCheia(p[b]) && ((p[a].elem[p[a].topo] == p[b].elem[p[b].topo]) || (p[b].elem[0] == 0))){      //Confere se é possível empilhar p[a] em p[b]
-        x = Desempilha(&p[a]);
-        Empilha(&p[b], x);
-    }
-    else{
-        printf("\n**TENTE NOVAMENTE**\n");
-        DesempilhaEmpilha(p, numP);
-    }
-        
-}
-
 void imprimePilha(Pilha *p, int numP){      //Imprime os frascos um ao lado do outro
     int j = 1, i = 0;
 
@@ -100,6 +70,43 @@ void imprimePilha(Pilha *p, int numP){      //Imprime os frascos um ao lado do o
 
     for(i = 0; i < numP; i++)       //Numeração do frasco
         printf("\t %d", (i + 1));
+}
+
+void inicializaZero(Pilha *p){      //Inicializa a pilha com todos os elementos iguais a zero
+    p->topo = -1;
+    for(int i = 0; i < tamMax; i++)
+        p->elem[i] = 0;
+}
+
+void DesempilhaEmpilha(Pilha *p, int numP){     //Seleciona os frascos a serem desempilhados e empilhados
+    int a, b, x;
+    
+    do{
+    printf("\n  Escolha o frasco de onde deseja remover: ");
+    scanf("%d", &a);
+    printf("  Escolha o frasco onde deseja colocar: ");
+    scanf("%d", &b);
+    
+    a--;b--;    //Pilha 1 = p[0]
+    
+    if ((a<0) || (a>=numP) || (b<0) || (b>=numP)){
+        printf("\n**TENTE NOVAMENTE**\n");
+        imprimePilha(p, numP);
+    }
+    
+    } while ((a<0) || (a>=numP) || (b<0) || (b>=numP));     //Repete a pergunta se os frascos escolhidos não existem
+
+
+    if(!PilhaVazia(p[a]) && !PilhaCheia(p[b]) && ((p[a].elem[p[a].topo] == p[b].elem[p[b].topo]) || (p[b].elem[0] == 0))){      //Confere se é possível empilhar p[a] em p[b]
+        x = Desempilha(&p[a]);
+        Empilha(&p[b], x);
+    }
+    else{
+        printf("\n**TENTE NOVAMENTE**\n");
+        imprimePilha(p, numP);
+        DesempilhaEmpilha(p, numP);
+    }
+        
 }
 
 bool JogoAcabou(Pilha *p, int x){       //Confere se todas as pilhas cheias tem elementos iguais
@@ -221,6 +228,7 @@ void GeraPilhas(Pilha *p, int numP, int numC){      //Gera pilhas aleatórias co
         i++;
     }
 
+    //Verifica se existe alguma pilha com todos os elementos iguais e gera pilhas novas caso verdadeiro
     if (ElemIguais(p, numP))
         GeraPilhas(p, numP, numC);
 }
@@ -230,30 +238,38 @@ void GeraPilhas(Pilha *p, int numP, int numC){      //Gera pilhas aleatórias co
 
 
 int main(){
+    char aux;
 
-    int numC;                           //Numero de cores. Deve ser entre 2 e 7
+    do
+    {
+        int numC;                           //Numero de cores. Deve ser entre 2 e 7
 
-    printf("Escolha a quantidade de cores para jogar (2 a 7): ");
-    scanf("%d", &numC);
-    while((numC<2) || (numC>7)){
-        printf("\nNumero de cores invalido! Escolha um valor de 2 a 7: ");
-        scanf("%d", &numC);    
-    }
+        printf("Escolha a quantidade de cores para jogar (2 a 7): ");
+        scanf("%d", &numC);
+        while((numC<2) || (numC>7)){
+            printf("\nNumero de cores invalido! Escolha um valor de 2 a 7: ");
+            scanf("%d", &numC);    
+        }
 
-    int numP = numC + 2;                //Numero de pilhas/frascos
-    Pilha q[numP];                      //Declara pilha
-    
-    srand(time(NULL));
+        int numP = numC + 2;                //Numero de pilhas/frascos
+        Pilha q[numP];                      //Declara pilha
+        
+        srand(time(NULL));
 
-    GeraPilhas(q, numP, numC);
+        GeraPilhas(q, numP, numC);
 
-    imprimePilha(q, numP);
-
-    while(JogoAcabou(q, numP) == false){
-        DesempilhaEmpilha(q, numP);
         imprimePilha(q, numP);
-    }
 
-    getch();
+        while(JogoAcabou(q, numP) == false){
+            DesempilhaEmpilha(q, numP);
+            imprimePilha(q, numP);
+        }
+
+        fflush(stdin);
+        printf("Deseja jogar novamente? (s/n)");
+        scanf("%c", &aux);
+
+    } while (aux == 's');
+
     return 0;
 }
